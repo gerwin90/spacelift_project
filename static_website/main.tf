@@ -84,7 +84,7 @@ resource "aws_dynamodb_table_item" "team_score_1" {
 
   item = jsonencode({
     TeamName = { S = "Bad Lads" },
-    Score    = { N = "1 - 0" },
+    Score    = { S = "2 - 0" },
     KC     = { N = "1" },
     MS   = { N = "1" },
     GK    = { N = "0" }
@@ -97,7 +97,7 @@ resource "aws_dynamodb_table_item" "team_score_2" {
 
   item = jsonencode({
     TeamName = { S = "Juicy Lads" },
-    Score    = { N = "1 - 0" },
+    Score    = { S = "2 - 0" },
     KC     = { N = "1" },
     MS   = { N = "1" },
     GK    = { N = "0" }
@@ -110,10 +110,10 @@ resource "aws_dynamodb_table_item" "team_score_3" {
 
   item = jsonencode({
     TeamName = { S = "Good Lads" },
-    Score    = { N = "1 - 0" },
-    KC     = { N = "1" },
-    MS   = { N = "1" },
-    GK    = { N = "0" }
+    Score    = { S = "2 - 0" },
+    KC     = { N = "0" },
+    MS   = { N = "0" },
+    GK    = { N = "2" }
   })
 }
 
