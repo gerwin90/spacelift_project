@@ -364,7 +364,21 @@ resource "aws_s3_object" "index" {
             '<tr><td colspan="5">Error loading data</td></tr>';
         });
     });
-  </script>       
+  </script>
+    <!-- Add a placeholder for the Twitch embed -->
+    <div id="twitch-embed"></div>
+
+    <!-- Load the Twitch embed JavaScript file -->
+    <script src="https://embed.twitch.tv/embed/v1.js"></script>
+
+    <!-- Create a Twitch.Embed object that will render within the "twitch-embed" element -->
+    <script type="text/javascript">
+      new Twitch.Embed("twitch-embed", {
+        width: 854,
+        height: 480,
+        channel: "monstercat",
+      });
+    </script>
 </body>
 </html>
 EOF
