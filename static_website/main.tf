@@ -304,7 +304,9 @@ resource "aws_s3_object" "index" {
   </style>
 </head>
 <body>
-  <h1>Hello World</h1>
+  <h1>We are the Mad Lads!</h1>
+  <h2>We rip through your defence like a bad curry through your cheeks</h2>
+  <p>Current team stats below...</p>
   <h2>Team Scores</h2>
   <table id="scoresTable">
     <tr>
