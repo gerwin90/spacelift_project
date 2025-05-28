@@ -117,19 +117,38 @@ resource "aws_dynamodb_table_item" "team_score_3" {
   })
 }
 
+# Create package.json for Lambda dependencies
+resource "local_file" "package_json" {
+  content = <<EOF
+{
+  "name": "get-team-scores",
+  "version": "1.0.0",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.0.0",
+    "@aws-sdk/lib-dynamodb": "^3.0.0"
+  }
+}
+EOF
+  filename = "${path.module}/package.json"
+}
+
 # Create Lambda function code
 resource "local_file" "lambda_code" {
   content = <<EOF
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, ScanCommand } = require('@aws-sdk/lib-dynamodb');
+
+const client = new DynamoDBClient({});
+const docClient = DynamoDBDocumentClient.from(client);
+
 exports.handler = async (event) => {
-  const AWS = require('aws-sdk');
-  const dynamodb = new AWS.DynamoDB.DocumentClient();
-  
   const params = {
     TableName: 'TeamScores'
   };
   
   try {
-    const data = await dynamodb.scan(params).promise();
+    const command = new ScanCommand(params);
+    const data = await docClient.send(command);
     return {
       statusCode: 200,
       headers: {
@@ -153,11 +172,29 @@ EOF
   filename = "${path.module}/index.js"
 }
 
+# Install npm dependencies
+resource "null_resource" "npm_install" {
+  triggers = {
+    package_json = local_file.package_json.content
+  }
+
+  provisioner "local-exec" {
+    command = "cd ${path.module} && npm install"
+  }
+}
+
 # Archive file for Lambda
 data "archive_file" "lambda_zip" {
   type        = "zip"
-  source_file = local_file.lambda_code.filename
+  source_dir  = path.module
   output_path = "${path.module}/lambda_function.zip"
+  excludes    = ["lambda_function.zip"]
+  
+  depends_on = [
+    local_file.lambda_code,
+    local_file.package_json,
+    null_resource.npm_install
+  ]
 }
 
 # IAM role for Lambda function
@@ -215,6 +252,8 @@ resource "aws_lambda_function" "get_scores" {
   runtime       = "nodejs18.x"
 
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
+
+  layers = ["arn:aws:lambda:${var.aws_region}:580247275435:layer:LambdaInsightsExtension:14"]
 
   depends_on = [
     aws_iam_role_policy_attachment.lambda_attachment
