@@ -108,6 +108,49 @@ resource "aws_dynamodb_table_item" "team_score_3" {
   })
 }
 
+# Create Lambda function code
+resource "local_file" "lambda_code" {
+  content = <<EOF
+exports.handler = async (event) => {
+  const AWS = require('aws-sdk');
+  const dynamodb = new AWS.DynamoDB.DocumentClient();
+  
+  const params = {
+    TableName: 'TeamScores'
+  };
+  
+  try {
+    const data = await dynamodb.scan(params).promise();
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data.Items)
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ error: error.message })
+    };
+  }
+};
+EOF
+  filename = "${path.module}/index.js"
+}
+
+# Archive file for Lambda
+data "archive_file" "lambda_zip" {
+  type        = "zip"
+  source_file = local_file.lambda_code.filename
+  output_path = "${path.module}/lambda_function.zip"
+}
+
 # IAM role for Lambda function
 resource "aws_iam_role" "lambda_role" {
   name = "lambda_dynamodb_role"
@@ -156,70 +199,17 @@ resource "aws_iam_role_policy_attachment" "lambda_attachment" {
 
 # Lambda function to get team scores
 resource "aws_lambda_function" "get_scores" {
-  filename      = "lambda_function.zip"
+  filename      = data.archive_file.lambda_zip.output_path
   function_name = "GetTeamScores"
   role          = aws_iam_role.lambda_role.arn
   handler       = "index.handler"
   runtime       = "nodejs14.x"
 
-  source_code_hash = filebase64sha256("lambda_function.zip")
+  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
   depends_on = [
-    aws_iam_role_policy_attachment.lambda_attachment,
-    local_file.lambda_zip
+    aws_iam_role_policy_attachment.lambda_attachment
   ]
-}
-
-# Create Lambda function code
-resource "local_file" "lambda_code" {
-  content = <<EOF
-exports.handler = async (event) => {
-  const AWS = require('aws-sdk');
-  const dynamodb = new AWS.DynamoDB.DocumentClient();
-  
-  const params = {
-    TableName: 'TeamScores'
-  };
-  
-  try {
-    const data = await dynamodb.scan(params).promise();
-    return {
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data.Items)
-    };
-  } catch (error) {
-    return {
-      statusCode: 500,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ error: error.message })
-    };
-  }
-};
-EOF
-  filename = "index.js"
-}
-
-# Create zip file for Lambda
-resource "null_resource" "lambda_zip" {
-  depends_on = [local_file.lambda_code]
-  
-  provisioner "local-exec" {
-    command = "zip -j lambda_function.zip index.js"
-  }
-}
-
-# Create local file for zip output
-resource "local_file" "lambda_zip" {
-  content  = "placeholder"
-  filename = "lambda_function.zip"
-  depends_on = [null_resource.lambda_zip]
 }
 
 # API Gateway REST API
@@ -240,7 +230,7 @@ resource "aws_api_gateway_method" "scores_method" {
   rest_api_id   = aws_api_gateway_rest_api.scores_api.id
   resource_id   = aws_api_gateway_resource.scores_resource.id
   http_method   = "GET"
-  authorization_type = "NONE"
+  authorization = "NONE"
 }
 
 # API Gateway Integration
