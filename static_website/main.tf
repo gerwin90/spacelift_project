@@ -203,7 +203,7 @@ resource "aws_lambda_function" "get_scores" {
   function_name = "GetTeamScores"
   role          = aws_iam_role.lambda_role.arn
   handler       = "index.handler"
-  runtime       = "nodejs14.x"
+  runtime       = "nodejs18.x"
 
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
