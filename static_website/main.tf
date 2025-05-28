@@ -377,6 +377,13 @@ resource "aws_s3_object" "index" {
         width: 854,
         height: 480,
         channel: "monstercat",
+        // Only needed if this page is going to be embedded on other websites
+        parent: ["spacelift-static-website-example.s3-website-us-east-1.amazonaws.com"]
+      });
+
+        embed.addEventListener(Twitch.Embed.VIDEO_READY, () => {
+        var player = embed.getPlayer();
+        player.play();
       });
     </script>
 </body>
