@@ -83,11 +83,11 @@ resource "aws_dynamodb_table_item" "team_score_1" {
   hash_key   = aws_dynamodb_table.team_scores.hash_key
 
   item = jsonencode({
-    TeamName = { S = "KC" },
-    Score    = { N = "85" },
-    Wins     = { N = "10" },
-    Losses   = { N = "5" },
-    Coach    = { S = "John Smith" }
+    TeamName = { S = "Bad Lads" },
+    Score    = { N = "1 - 0" },
+    KC     = { N = "1" },
+    MS   = { N = "1" },
+    GK    = { N = "0" }
   })
 }
 
@@ -96,11 +96,11 @@ resource "aws_dynamodb_table_item" "team_score_2" {
   hash_key   = aws_dynamodb_table.team_scores.hash_key
 
   item = jsonencode({
-    TeamName = { S = "MS" },
-    Score    = { N = "92" },
-    Wins     = { N = "12" },
-    Losses   = { N = "3" },
-    Coach    = { S = "Jane Doe" }
+    TeamName = { S = "Juicy Lads" },
+    Score    = { N = "1 - 0" },
+    KC     = { N = "1" },
+    MS   = { N = "1" },
+    GK    = { N = "0" }
   })
 }
 
@@ -109,11 +109,11 @@ resource "aws_dynamodb_table_item" "team_score_3" {
   hash_key   = aws_dynamodb_table.team_scores.hash_key
 
   item = jsonencode({
-    TeamName = { S = "GK" },
-    Score    = { N = "78" },
-    Wins     = { N = "8" },
-    Losses   = { N = "7" },
-    Coach    = { S = "Bob Johnson" }
+    TeamName = { S = "Good Lads" },
+    Score    = { N = "1 - 0" },
+    KC     = { N = "1" },
+    MS   = { N = "1" },
+    GK    = { N = "0" }
   })
 }
 
