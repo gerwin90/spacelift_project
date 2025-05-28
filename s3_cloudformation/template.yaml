@@ -1,6 +1,12 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'CloudFormation template to create an S3 bucket'
 
+Parameters:
+  AWSRegion:
+    Type: String
+    Default: eu-west-1
+    Description: The AWS region where the S3 bucket will be created
+
 Resources:
   SpaceLiftBucket:
     Type: AWS::S3::Bucket
