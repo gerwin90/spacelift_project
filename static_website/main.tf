@@ -364,28 +364,28 @@ resource "aws_s3_object" "index" {
             '<tr><td colspan="5">Error loading data</td></tr>';
         });
     });
+
+
+  <h1>My Twitch Stream</h1>
+  
+  <!-- Twitch Embed -->
+  <div id="twitch-embed" style="width: 100%; height: 480px;"></div>
+
+  <!-- Load the Twitch embed JavaScript file -->
+  <script src="https://embed.twitch.tv/embed/v1.js"></script>
+
+  <!-- Create a Twitch.Embed object -->
+  <script type="text/javascript">
+    new Twitch.Embed("twitch-embed", {
+      width: "100%",
+      height: 480,
+      channel: "monstercat", // Replace with your channel name
+      layout: "video",
+      autoplay: false
+    });
   </script>
-    <!-- Add a placeholder for the Twitch embed -->
-    <div id="twitch-embed"></div>
 
-    <!-- Load the Twitch embed JavaScript file -->
-    <script src="https://embed.twitch.tv/embed/v1.js"></script>
 
-    <!-- Create a Twitch.Embed object that will render within the "twitch-embed" element -->
-    <script type="text/javascript">
-      new Twitch.Embed("twitch-embed", {
-        width: 854,
-        height: 480,
-        channel: "monstercat",
-        // Only needed if this page is going to be embedded on other websites
-        parent: ["spacelift-static-website-example.s3-website-us-east-1.amazonaws.com"]
-      });
-
-        embed.addEventListener(Twitch.Embed.VIDEO_READY, () => {
-        var player = embed.getPlayer();
-        player.play();
-      });
-    </script>
 </body>
 </html>
 EOF
