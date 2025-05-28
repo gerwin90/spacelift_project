@@ -84,7 +84,10 @@ resource "aws_dynamodb_table_item" "team_score_1" {
 
   item = jsonencode({
     TeamName = { S = "KC" },
-    Score    = { N = "85" }
+    Score    = { N = "85" },
+    Wins     = { N = "10" },
+    Losses   = { N = "5" },
+    Coach    = { S = "John Smith" }
   })
 }
 
@@ -94,7 +97,10 @@ resource "aws_dynamodb_table_item" "team_score_2" {
 
   item = jsonencode({
     TeamName = { S = "MS" },
-    Score    = { N = "92" }
+    Score    = { N = "92" },
+    Wins     = { N = "12" },
+    Losses   = { N = "3" },
+    Coach    = { S = "Jane Doe" }
   })
 }
 
@@ -104,7 +110,10 @@ resource "aws_dynamodb_table_item" "team_score_3" {
 
   item = jsonencode({
     TeamName = { S = "GK" },
-    Score    = { N = "78" }
+    Score    = { N = "78" },
+    Wins     = { N = "8" },
+    Losses   = { N = "7" },
+    Coach    = { S = "Bob Johnson" }
   })
 }
 
@@ -296,6 +305,9 @@ resource "aws_s3_object" "index" {
     <tr>
       <th>Team Name</th>
       <th>Score</th>
+      <th>Wins</th>
+      <th>Losses</th>
+      <th>Coach</th>
     </tr>
     <tbody id="scoresBody"></tbody>
   </table>
@@ -319,6 +331,18 @@ resource "aws_s3_object" "index" {
             const scoreCell = document.createElement('td');
             scoreCell.textContent = item.Score;
             row.appendChild(scoreCell);
+            
+            const winsCell = document.createElement('td');
+            winsCell.textContent = item.Wins;
+            row.appendChild(winsCell);
+            
+            const lossesCell = document.createElement('td');
+            lossesCell.textContent = item.Losses;
+            row.appendChild(lossesCell);
+            
+            const coachCell = document.createElement('td');
+            coachCell.textContent = item.Coach;
+            row.appendChild(coachCell);
             
             tableBody.appendChild(row);
           });
