@@ -364,7 +364,7 @@ resource "aws_s3_object" "index" {
             '<tr><td colspan="5">Error loading data</td></tr>';
         });
     });
-
+</script>
 
   <h1>My Twitch Stream</h1>
   
