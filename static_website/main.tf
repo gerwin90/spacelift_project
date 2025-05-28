@@ -309,7 +309,7 @@ resource "aws_s3_object" "index" {
   <p>Current team stats below...</p>
   <h2>Who are we</h2>
   <p>KC - known to header the ball into Row 879 from the 6 yard box</p>
-  <p>MS - can go North, South, East or West, the football filed equivalent to a Castle on a chessboard</p>
+  <p>MS - can go North, South, East or West, the football field equivalent to a Castle on a chessboard</p>
   <p>GK - the red card machine... Just puts the team infront of his own ambitions</p>
   <h2>Team Scores</h2>
   <table id="scoresTable">
