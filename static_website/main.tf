@@ -310,9 +310,9 @@ resource "aws_s3_object" "index" {
     <tr>
       <th>Team Name</th>
       <th>Score</th>
-      <th>Wins</th>
-      <th>Losses</th>
-      <th>Coach</th>
+      <th>KC</th>
+      <th>MS</th>
+      <th>GK</th>
     </tr>
     <tbody id="scoresBody"></tbody>
   </table>
@@ -337,10 +337,28 @@ resource "aws_s3_object" "index" {
             scoreCell.textContent = item.Score;
             row.appendChild(scoreCell);
             
-            const winsCell = document.createElement('td');
-            winsCell.textContent = item.Wins;
-            row.appendChild(winsCell);
+            const kcCell = document.createElement('td');
+            kcCell.textContent = item.KC;
+            row.appendChild(kcCell);
             
+            const msCell = document.createElement('td');
+            msCell.textContent = item.MS;
+            row.appendChild(msCell);
+            
+            const gkCell = document.createElement('td');
+            gkCell.textContent = item.GK;
+            row.appendChild(gkCell);
+            
+            tableBody.appendChild(row);
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+          document.getElementById('scoresBody').innerHTML = 
+            '<tr><td colspan="5">Error loading data</td></tr>';
+        });
+    });
+  </script>       
             const lossesCell = document.createElement('td');
             lossesCell.textContent = item.Losses;
             row.appendChild(lossesCell);
