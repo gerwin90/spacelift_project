@@ -359,24 +359,6 @@ resource "aws_s3_object" "index" {
         });
     });
   </script>       
-            const lossesCell = document.createElement('td');
-            lossesCell.textContent = item.Losses;
-            row.appendChild(lossesCell);
-            
-            const coachCell = document.createElement('td');
-            coachCell.textContent = item.Coach;
-            row.appendChild(coachCell);
-            
-            tableBody.appendChild(row);
-          });
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-          document.getElementById('scoresBody').innerHTML = 
-            '<tr><td colspan="2">Error loading data</td></tr>';
-        });
-    });
-  </script>
 </body>
 </html>
 EOF
