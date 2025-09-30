@@ -9,3 +9,15 @@ variable "index_file" {
   type        = string
   # No default - must be provided by caller
 }
+
+variable "domain_name" {
+  description = "Domain name for the website"
+  type        = string
+  # No default - must be provided by caller
+}
+
+variable "certificate_arn" {
+  description = "ACM certificate ARN (must be in us-east-1)"
+  type        = string
+  # No default - must be provided by caller
+}
