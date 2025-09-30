@@ -9,10 +9,13 @@ resource "aws_cloudfront_origin_access_control" "oac" {
 
 resource "aws_cloudfront_distribution" "cdn" {
   enabled = true
-  comment = "TF starter CDN"
+  aliases = var.domain_name != null ? [var.domain_name] : []
 
   viewer_certificate {
-    cloudfront_default_certificate = true
+    cloudfront_default_certificate = var.domain_name == null
+    acm_certificate_arn            = var.certificate_arn
+    ssl_support_method             = var.domain_name != null ? "sni-only" : null
+    minimum_protocol_version       = var.domain_name != null ? "TLSv1.2_2021" : null
   }
 
   origin {
@@ -61,3 +64,4 @@ resource "aws_cloudfront_distribution" "cdn" {
 
   price_class = "PriceClass_100"
 }
+
