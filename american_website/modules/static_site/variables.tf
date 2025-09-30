@@ -13,11 +13,11 @@ variable "index_file" {
 variable "domain_name" {
   description = "Domain name for the website"
   type        = string
-  # No default - must be provided by caller
+  default     = "twohumansonetailinamerica.com"
 }
 
 variable "certificate_arn" {
   description = "ACM certificate ARN (must be in us-east-1)"
   type        = string
-  # No default - must be provided by caller
+  default     = "arn:aws:acm:us-east-1:310649825077:certificate/c3b9ce2e-6f9f-4b09-a339-3f2249dbb668"
 }
